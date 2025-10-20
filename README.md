@@ -1,2 +1,4 @@
-# web-330
- repo for web-231 course at bellevue 
+# WEB 330 Enterprise JavaScript 2
+## Contributors
+- Richard Krasso
+- Will Southard
