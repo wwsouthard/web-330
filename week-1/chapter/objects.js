@@ -14,7 +14,11 @@
 /* Object defining the poker game */
 let pokerGame = {
    currentBank: null,
-   currentBet: null
+   currentBet: null,
+   placeBet: function() {
+      this.currentBank -= this.currentBet;
+      return this.currentBank;
+   }
 };
 
 

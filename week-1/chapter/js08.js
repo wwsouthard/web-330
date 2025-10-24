@@ -24,6 +24,17 @@ function playDrawPoker() {
   let bankBox = document.getElementById("bank");
   let cardImages = document.querySelectorAll("img.cardImg");
 
+  // Set the initial bank and bet values
+  pokerGame.currentBank = 500;
+  pokerGame.currentBet = 25;
+
+  // Display the current bank value
+  bankBox.value = pokerGame.currentBank;
+
+  // Change the bet when the selection changes
+  betSelection.onchange = function() {
+   pokerGame.currentBet = parseInt(this.value);
+  }
 
   dealButton.addEventListener("click", function() {
    if (pokerGame.currentBank >= pokerGame.currentBet) {
@@ -33,6 +44,11 @@ function playDrawPoker() {
      drawButton.disabled = false;       // Turn on the Draw button
      standButton.disabled = false;      // Turn on the Stand Button
      statusBox.textContent = "";        // Erase any status messages
+
+     // Reduce the bank by the size of the bet
+     bankBox.value = pokerGame.placeBet();
+   } else {
+     statusBox.textContent = "Insufficient Funds";
    }
 
   });
