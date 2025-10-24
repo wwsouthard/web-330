@@ -1,13 +1,13 @@
 "use strict";
 /*    JavaScript 7th Edition
-      Chapter 9
-      Project 09-01
+     Chapter 9
+     Project 09-01
 
-      Project to read field values from session storage
-      Author: 
-      Date:   
+     Project to read field values from session storage
+     Author:
+     Date:
 
-      Filename: project09-02b.js
+     Filename: project09-02b.js
 */
 
 /* Page Objects */
@@ -20,5 +20,3 @@ let accOption = document.getElementById("accOption");
 let region = document.getElementById("region");
 let miles = document.getElementById("miles");
 let comments = document.getElementById("comments");
-
-

@@ -1,13 +1,13 @@
 "use strict";
 /*    JavaScript 7th Edition
-      Chapter 9
-      Project 09-02
+     Chapter 9
+     Project 09-02
 
-      Project to read field values from web storage
-      Author: 
-      Date:   
+     Project to read field values from web storage
+     Author:
+     Date:
 
-      Filename: project09-02a.js
+     Filename: project09-02a.js
 */
 
 /* Page Objects */

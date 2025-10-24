@@ -1,4 +1,4 @@
-# WEB 330 Enterprise JavaScript II
+﻿# WEB 330 Enterprise JavaScript II
 
 ## Course Description
 Master JavaScript by learning and solving real-world problems.  This course continues where the 

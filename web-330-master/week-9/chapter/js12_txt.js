@@ -1,13 +1,12 @@
 "use strict";
 
 /*  JavaScript 7th Edition
-    Chapter 12
-    Chapter case
+   Chapter 12
+   Chapter case
 
-    Bonsai Expressions FAQ 
-    Author: 
-    Date:   
+   Bonsai Expressions FAQ
+   Author:
+   Date:
 
-    Filename: js12.js
+   Filename: js12.js
 */
-

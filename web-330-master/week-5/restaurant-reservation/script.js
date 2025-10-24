@@ -22,5 +22,5 @@ function reserveTable(tableNumber, callback, time) {
 document
   .getElementById("reservationForm")
   .addEventListener("submit", function (e) {
-    // Add your code here
+   // Add your code here
   });

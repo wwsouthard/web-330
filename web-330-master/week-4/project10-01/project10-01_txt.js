@@ -1,13 +1,13 @@
 "use strict";
 /*    JavaScript 7th Edition
-      Chapter 10
-      Project 10-01
+     Chapter 10
+     Project 10-01
 
-      Project to create a drag and drop jigsaw puzzle
-      Author: 
-      Date:   
+     Project to create a drag and drop jigsaw puzzle
+     Author:
+     Date:
 
-      Filename: project10-01.js
+     Filename: project10-01.js
 */
 
 // Reference to the puzzle board
@@ -22,24 +22,23 @@ let pointerX, pointerY, pieceX, pieceY;
 
 // Sort the integers from 1 to 48 in random order
 for (let i = 0; i < 48 ; i++) {
-   intList[i] = i+1;
+  intList[i] = i+1;
 }
 intList.sort(function() {
-   return 0.5 - Math.random();
+  return 0.5 - Math.random();
 });
 
 // generate randomly-sorted puzzle pieces
 for (let i = 0; i < 48; i++) {
-   let piece = document.createElement("img");
-   piece.src = "piece" + intList[i] + ".png";
-   let rowNum = Math.ceil((i+1)/8);
-   let colNum = (i + 1) - (rowNum - 1)*8;
-   piece.style.top = (rowNum - 1)*98 + 7 + "px";
-   piece.style.left = (colNum - 1)*98 + 7 + "px";
-   piece.draggable = false; // override the default draggability of images
-   puzzleBoard.appendChild(piece);      
+  let piece = document.createElement("img");
+  piece.src = "piece" + intList[i] + ".png";
+  let rowNum = Math.ceil((i+1)/8);
+  let colNum = (i + 1) - (rowNum - 1)*8;
+  piece.style.top = (rowNum - 1)*98 + 7 + "px";
+  piece.style.left = (colNum - 1)*98 + 7 + "px";
+  piece.draggable = false; // override the default draggability of images
+  puzzleBoard.appendChild(piece);
 }
 
 // Node list representing the puzzle pieces
 let pieces = document.querySelectorAll("div#puzzleBoard img");
-
