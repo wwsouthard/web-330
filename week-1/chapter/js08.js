@@ -44,14 +44,16 @@ function playDrawPoker() {
   // Add click event listeners to card images for discarding
   for (let i = 0; i < cardImages.length; i++) {
     cardImages[i].addEventListener("click", function() {
-      // Toggle selection of the card (only when draw/stand buttons are enabled)
+      // Flip the card images when clicked (only when draw/stand buttons are enabled)
       if (!drawButton.disabled && !standButton.disabled) {
-        selectedCards[i] = !selectedCards[i];
-        // Toggle visual feedback
-        if (selectedCards[i]) {
-          this.style.opacity = "0.5";
+        if (this.src.includes("cardback.png")) {
+          // Show the front of the card (keep this card)
+          this.src = myHand.cards[i].cardImage();
+          selectedCards[i] = false;
         } else {
-          this.style.opacity = "1.0";
+          // Show the back of the card (discard this card)
+          this.src = "cardback.png";
+          selectedCards[i] = true;
         }
       }
     });
@@ -67,7 +69,6 @@ function playDrawPoker() {
       // Reset selected cards
       for (let i = 0; i < selectedCards.length; i++) {
         selectedCards[i] = false;
-        cardImages[i].style.opacity = "1.0";
       }
 
       // Enable the Draw and Stand buttons after the initial deal
@@ -88,7 +89,7 @@ function playDrawPoker() {
       // Deal 5 cards from the deck to the hand
       myDeck.dealTo(myHand);
       
-      // Display the card images on the table
+      // Display the card images on the table (show face up)
       for (let i = 0; i < cardImages.length; i++) {
         cardImages[i].src = myHand.cards[i].cardImage();
       }
@@ -106,14 +107,19 @@ function playDrawPoker() {
       myDeck.shuffle();
     }
 
-    // Replace selected cards with new ones from the deck
-    for (let i = 0; i < selectedCards.length; i++) {
-      if (selectedCards[i]) {
-        myHand.cards[i] = myDeck.cards.shift();
+    // Replace cards that are showing the back (cardback.png)
+    for (let i = 0; i < cardImages.length; i++) {
+      if (cardImages[i].src.includes("cardback.png")) {
+        // Replace the card in the hand and update the image
+        myHand.replaceCard(i, myDeck);
         cardImages[i].src = myHand.cards[i].cardImage();
-        cardImages[i].style.opacity = "1.0";
         selectedCards[i] = false;
       }
+    }
+
+    // Reset selected cards tracking
+    for (let i = 0; i < selectedCards.length; i++) {
+      selectedCards[i] = false;
     }
 
     // Evaluate the hand and determine winnings
