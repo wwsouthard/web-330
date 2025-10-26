@@ -21,6 +21,46 @@ let pokerGame = {
    }
 };
 
+/* Constructor for poker cards */
+function pokerCard(cardSuit, cardRank) {
+   this.suit = cardSuit;
+   this.rank = cardRank;
+}
+
+/* Constructor function for poker decks */
+function pokerDeck() {
+   // List the suits and ranks
+   let suits = ["clubs", "diamonds", "hearts", "spades"];
+   let ranks = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king", "ace"];
+   this.cards = [];
+
+   // Add a card for each combination of suit and rank
+   for (let i = 0; i < 4; i++) {
+      for (let j = 0; j < 13; j++) {
+         // Add a pokerCard object
+         this.cards.push(new pokerCard(suits[i], ranks[j]));
+      }
+   }
+
+   // Method to randomly sort the cards in the deck
+   this.shuffle = function() {
+      this.cards.sort(function() {
+         return 0.5 - Math.random();
+      });
+   };
+
+   // Method to deal cards form the deck into a hand
+   this.dealTo = function(pokerHand) {
+      let cardsDealt = pokerHand.cards.length;
+      pokerHand.cards = this.cards.splice(0, cardsDealt);
+   };
+};
+
+/* Constructor function for poker hands */
+function pokerHand() {
+   this.cards = new Array(handLength);
+}
+
 
 
 

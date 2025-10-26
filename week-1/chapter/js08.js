@@ -28,6 +28,13 @@ function playDrawPoker() {
   pokerGame.currentBank = 500;
   pokerGame.currentBet = 25;
 
+  // Create a deck of shuffled cards
+  let myDeck = new pokerDeck();
+  myDeck.shuffle();
+
+  // Create an empty poker hand object
+  let myHand = new pokerHand(5);
+
   // Display the current bank value
   bankBox.value = pokerGame.currentBank;
 
@@ -47,6 +54,15 @@ function playDrawPoker() {
 
      // Reduce the bank by the size of the bet
      bankBox.value = pokerGame.placeBet();
+
+     // Get a new deck if there are less than 10 cards left
+     if (myDeck.cards.length < 10) {
+      myDeck = new pokerDeck();
+      myDeck.shuffle();
+     }
+     // Deal 5 cards from the deck to the hand
+     myDeck.dealTo(myHand);
+     console.log(myDeck, myHand);
    } else {
      statusBox.textContent = "Insufficient Funds";
    }
