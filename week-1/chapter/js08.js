@@ -35,66 +35,156 @@ function playDrawPoker() {
   // Create an empty poker hand object
   let myHand = new pokerHand(5);
 
+  // Create an array to track selected cards for discarding
+  let selectedCards = [false, false, false, false, false];
+
   // Display the current bank value
   bankBox.value = pokerGame.currentBank;
 
+  // Add click event listeners to card images for discarding
+  for (let i = 0; i < cardImages.length; i++) {
+    cardImages[i].addEventListener("click", function() {
+      // Toggle selection of the card (only when draw/stand buttons are enabled)
+      if (!drawButton.disabled && !standButton.disabled) {
+        selectedCards[i] = !selectedCards[i];
+        // Toggle visual feedback
+        if (selectedCards[i]) {
+          this.style.opacity = "0.5";
+        } else {
+          this.style.opacity = "1.0";
+        }
+      }
+    });
+  }
+
   // Change the bet when the selection changes
   betSelection.onchange = function() {
-   pokerGame.currentBet = parseInt(this.value);
+    pokerGame.currentBet = parseInt(this.value);
   }
 
   dealButton.addEventListener("click", function() {
-   if (pokerGame.currentBank >= pokerGame.currentBet) {
-     // Enable the Draw and Stand buttons after the initial deal
-     dealButton.disabled = true;        // Turn off the Deal button
-     betSelection.disabled = true;      // Turn off the Bet Selection list
-     drawButton.disabled = false;       // Turn on the Draw button
-     standButton.disabled = false;      // Turn on the Stand Button
-     statusBox.textContent = "";        // Erase any status messages
+    if (pokerGame.currentBank >= pokerGame.currentBet) {
+      // Reset selected cards
+      for (let i = 0; i < selectedCards.length; i++) {
+        selectedCards[i] = false;
+        cardImages[i].style.opacity = "1.0";
+      }
 
-     // Reduce the bank by the size of the bet
-     bankBox.value = pokerGame.placeBet();
+      // Enable the Draw and Stand buttons after the initial deal
+      dealButton.disabled = true;        // Turn off the Deal button
+      betSelection.disabled = true;      // Turn off the Bet Selection list
+      drawButton.disabled = false;       // Turn on the Draw button
+      standButton.disabled = false;      // Turn on the Stand Button
+      statusBox.textContent = "";        // Erase any status messages
 
-     // Get a new deck if there are less than 10 cards left
-     if (myDeck.cards.length < 10) {
-      myDeck = new pokerDeck();
-      myDeck.shuffle();
-     }
-     // Deal 5 cards from the deck to the hand
-     myDeck.dealTo(myHand);
-     console.log(myDeck, myHand);
-   } else {
-     statusBox.textContent = "Insufficient Funds";
-   }
+      // Reduce the bank by the size of the bet
+      bankBox.value = pokerGame.placeBet();
+
+      // Get a new deck if there are less than 10 cards left
+      if (myDeck.cards.length < 10) {
+        myDeck = new pokerDeck();
+        myDeck.shuffle();
+      }
+      // Deal 5 cards from the deck to the hand
+      myDeck.dealTo(myHand);
+      
+      // Display the card images on the table
+      for (let i = 0; i < cardImages.length; i++) {
+        cardImages[i].src = myHand.cards[i].cardImage();
+      }
+    } else {
+      statusBox.textContent = "Insufficient Funds";
+    }
 
   });
 
 
   drawButton.addEventListener("click", function() {
-   // Enable the Deal and Bet options when the player chooses to draw new cards
-   dealButton.disabled = false;        // Turn on the Deal button
-   betSelection.disabled = false;      // Turn on the Bet Selection list
-   drawButton.disabled = true;         // Turn off the Draw button
-   standButton.disabled = true;        // Turn off the Stand Button
+    // Get a new deck if there are less than 10 cards left
+    if (myDeck.cards.length < 10) {
+      myDeck = new pokerDeck();
+      myDeck.shuffle();
+    }
 
+    // Replace selected cards with new ones from the deck
+    for (let i = 0; i < selectedCards.length; i++) {
+      if (selectedCards[i]) {
+        myHand.cards[i] = myDeck.cards.shift();
+        cardImages[i].src = myHand.cards[i].cardImage();
+        cardImages[i].style.opacity = "1.0";
+        selectedCards[i] = false;
+      }
+    }
 
+    // Evaluate the hand and determine winnings
+    let handResult = handType(myHand);
+    let multipliers = {
+      "Royal Flush": 250,
+      "Straight Flush": 50,
+      "Four of a Kind": 25,
+      "Full House": 9,
+      "Flush": 6,
+      "Straight": 4,
+      "Three of a Kind": 3,
+      "Two Pair": 2,
+      "Jacks or Better": 1,
+      "No Winner": 0
+    };
 
+    let winnings = pokerGame.currentBet * multipliers[handResult];
+    pokerGame.currentBank += winnings;
+    bankBox.value = pokerGame.currentBank;
+
+    if (winnings > 0) {
+      statusBox.textContent = handResult + "! You won $" + winnings;
+    } else {
+      statusBox.textContent = handResult;
+    }
+
+    // Enable the Deal and Bet options
+    dealButton.disabled = false;
+    betSelection.disabled = false;
+    drawButton.disabled = true;
+    standButton.disabled = true;
   });
 
 
   standButton.addEventListener("click", function() {
-   // Enable the Deal and Bet options when the player chooses to stand with their hand
-   dealButton.disabled = false;        // Turn on the Deal button
-   betSelection.disabled = false;      // Turn on the Bet Selection list
-   drawButton.disabled = true;         // Turn off the Draw button
-   standButton.disabled = true;        // Turn off the Stand Button
+    // Evaluate the hand and determine winnings
+    let handResult = handType(myHand);
+    let multipliers = {
+      "Royal Flush": 250,
+      "Straight Flush": 50,
+      "Four of a Kind": 25,
+      "Full House": 9,
+      "Flush": 6,
+      "Straight": 4,
+      "Three of a Kind": 3,
+      "Two Pair": 2,
+      "Jacks or Better": 1,
+      "No Winner": 0
+    };
 
+    let winnings = pokerGame.currentBet * multipliers[handResult];
+    pokerGame.currentBank += winnings;
+    bankBox.value = pokerGame.currentBank;
 
+    if (winnings > 0) {
+      statusBox.textContent = handResult + "! You won $" + winnings;
+    } else {
+      statusBox.textContent = handResult;
+    }
+
+    // Enable the Deal and Bet options
+    dealButton.disabled = false;
+    betSelection.disabled = false;
+    drawButton.disabled = true;
+    standButton.disabled = true;
   });
 
 
   // Reload the current page when the Reset button is clicked
   resetButton.addEventListener("click", function() {
-   location.reload();
+    location.reload();
   });
 }
